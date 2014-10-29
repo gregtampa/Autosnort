@@ -55,7 +55,7 @@ fi
 function install_packages()
 {
 
-apt-get update &>> $logfile && apt-get install -y ${@} &>> $logfile
+apt-get install -y ${@} &>> $logfile
 error_check 'Package installation'
 
 }
@@ -193,7 +193,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # System updates
 print_status "Performing apt-get update and upgrade (May take a while if this is a fresh install).."
-apt-get update &>> $logfile && apt-get -y upgrade &>> $logfile
+#apt-get update &>> $logfile && apt-get -y upgrade &>> $logfile
 error_check 'System updates'
 
 ########################################
@@ -248,7 +248,7 @@ case $ui_inst in
 	chmod 700 /etc/apache2/ssl
 	cd /etc/apache2/ssl
 	
-	openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj "/C=US/ST=Nevada/L=LasVegas/O=Security/CN=`hostname`" -keyout ids.key  -out ids.cert &>> $logfile
+	openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj "/C=US/ST=Florida/L=Fort Lauderdale/O=Security/CN=`hostname`" -keyout ids.key  -out ids.cert &>> $logfile
 	error_check 'SSL certificate and key generation'
 	print_good "SSL private key location: /etc/apache2/ssl/ids.key"
 	print_good "SSL certificate location: /etc/apache2/ssl/ids.cert"
@@ -362,7 +362,7 @@ esac
 print_status "Checking latest versions of Snort, Daq and Rules via snort.org..."
 
 cd /tmp
-wget https://www.snort.org -O /tmp/snort &> $logfile
+wget https://www.snort.org -O /tmp/snort --no-check-certificate &> $logfile
 error_check 'Download of www.snort.org index page'
 
 snorttar=`grep snort-[0-9] /tmp/snort | grep .tar.gz | tail -1 | cut -d"/" -f4 | cut -d\" -f1`
@@ -421,7 +421,7 @@ cd /usr/src
 
 print_status "Acquiring and unpacking $daqver to /usr/src.."
 
-wget https://www.snort.org/downloads/snort/$daqtar -O $daqtar &>> $logfile
+wget https://www.snort.org/downloads/snort/$daqtar -O $daqtar --no-check-certificate &>> $logfile
 error_check 'Download of DAQ'
 
 tar -xzvf $daqtar &>> $logfile
@@ -456,7 +456,7 @@ cd /usr/src
 
 print_status "Acquiring and unpacking $snortver to /usr/src.."
 
-wget https://www.snort.org/downloads/snort/$snorttar -O $snorttar &>> $logfile
+wget https://www.snort.org/downloads/snort/$snorttar -O $snorttar --no-check-certificate &>> $logfile
 error_check 'Download of Snort'
 
 tar -xzvf $snorttar &>> $logfile
@@ -649,7 +649,7 @@ print_status "Downloading, making and compiling barnyard2.."
 
 cd /usr/src
 
-wget https://github.com/firnsy/barnyard2/archive/master.tar.gz -O barnyard2.tar.gz &>> $logfile
+wget https://github.com/firnsy/barnyard2/archive/master.tar.gz -O barnyard2.tar.gz --no-check-certificate &>> $logfile
 error_check 'Download of Barnyard2'
 
 tar -xzvf barnyard2.tar.gz &>> $logfile
